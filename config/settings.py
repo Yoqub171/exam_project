@@ -42,7 +42,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'shop',
     'widget_tweaks',
-    'users.apps.UsersConfig',
+    'users',
     "adminsortable2",
     'import_export',
 ]

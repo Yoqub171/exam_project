@@ -85,7 +85,7 @@
 
               <button class="btn navbar-toggler-humburger-icon navbar-vertical-toggle" data-bs-toggle="tooltip" data-bs-placement="left" title="Toggle Navigation"><span class="navbar-toggle-icon"><span class="toggle-line"></span></span></button>
 
-            </div><a class="navbar-brand" href="home.html">
+            </div><a class="navbar-brand" href="{% url 'shop:home' %}">
               <div class="d-flex align-items-center py-3"><img class="me-2" src="{% static 'users/assets/img/icons/spot-illustrations/falcon.png' %}" alt="" width="40" /><span class="font-sans-serif">alijahon</span>
               </div>
             </a>
@@ -207,32 +207,44 @@
                     </div>
                   </a>
                   <ul class="nav collapse false" id="e-commerce">
-                    <li class="nav-item"><a class="nav-link dropdown-indicator" href="#product" data-bs-toggle="collapse" aria-expanded="false" aria-controls="e-commerce">
-                        <div class="d-flex align-items-center"><span class="nav-link-text ps-1">Product</span>
+                    <li class="nav-item">
+                      <a class="nav-link dropdown-indicator" href="#product" data-bs-toggle="collapse" aria-expanded="false" aria-controls="e-commerce">
+                        <div class="d-flex align-items-center">
+                          <span class="nav-link-text ps-1">Product</span>
                         </div>
                       </a>
-                      <!-- more inner pages-->
+
                       <ul class="nav collapse false" id="product">
-                        <li class="nav-item"><a class="nav-link" href="{% url 'shop:product_list' %}" aria-expanded="false">
-                            <div class="d-flex align-items-center"><span class="nav-link-text ps-1">Product list</span>
+                        <li class="nav-item">
+                          <a class="nav-link" href="{% url 'shop:product_list' %}" aria-expanded="false">
+                            <div class="d-flex align-items-center">
+                              <span class="nav-link-text ps-1">Product list</span>
                             </div>
                           </a>
-                          <!-- more inner pages-->
                         </li>
-                        <li class="nav-item"><a class="nav-link" href="app/e-commerce/product/product-grid.html" aria-expanded="false">
-                            <div class="d-flex align-items-center"><span class="nav-link-text ps-1">Product grid</span>
+
+                        <li class="nav-item">
+                          <a class="nav-link" href="{% url 'shop:product_grid' %}" aria-expanded="false">
+                            <div class="d-flex align-items-center">
+                              <span class="nav-link-text ps-1">Product grid</span>
                             </div>
                           </a>
-                          <!-- more inner pages-->
                         </li>
-                        <li class="nav-item"><a class="nav-link" href="app/e-commerce/product/product-details.html" aria-expanded="false">
-                            <div class="d-flex align-items-center"><span class="nav-link-text ps-1">Product details</span>
-                            </div>
-                          </a>
-                          <!-- more inner pages-->
-                        </li>
+
+                        {% for product in products %}
+                            <li class="nav-item">
+                                <a class="nav-link" href="{% url 'shop:product_details' product.id %}" aria-expanded="false">
+                                    <div class="d-flex align-items-center">
+                                        <span class="nav-link-text ps-1">{{ product.name }} details</span>
+                                    </div>
+                                </a>
+                            </li>
+                        {% endfor %}
+
+                        
                       </ul>
                     </li>
+
                     <li class="nav-item"><a class="nav-link dropdown-indicator" href="#orders" data-bs-toggle="collapse" aria-expanded="false" aria-controls="e-commerce">
                         <div class="d-flex align-items-center"><span class="nav-link-text ps-1">Orders</span>
                         </div>
@@ -253,13 +265,13 @@
                         </li>
                       </ul>
                     </li>
-                    <li class="nav-item"><a class="nav-link" href="app/e-commerce/customers.html" aria-expanded="false">
+                    <li class="nav-item"><a class="nav-link" href="{% url 'users:customer_list' %}" aria-expanded="false">
                         <div class="d-flex align-items-center"><span class="nav-link-text ps-1">Customers</span>
                         </div>
                       </a>
                       <!-- more inner pages-->
                     </li>
-                    <li class="nav-item"><a class="nav-link" href="app/e-commerce/customer-details.html" aria-expanded="false">
+                    <li class="nav-item"><a class="nav-link" href="{% url 'users:customer_list' %}" aria-expanded="false">
                         <div class="d-flex align-items-center"><span class="nav-link-text ps-1">Customer details</span>
                         </div>
                       </a>
@@ -353,19 +365,19 @@
                       </a>
                       <!-- more inner pages-->
                       <ul class="nav collapse false" id="simple">
-                        <li class="nav-item"><a class="nav-link" href="pages/authentication/simple/login.html" aria-expanded="false">
+                        <li class="nav-item"><a class="nav-link" href="{% url 'users:login_page' %}" aria-expanded="false">
                             <div class="d-flex align-items-center"><span class="nav-link-text ps-1">Login</span>
                             </div>
                           </a>
                           <!-- more inner pages-->
                         </li>
-                        <li class="nav-item"><a class="nav-link" href="pages/authentication/simple/logout.html" aria-expanded="false">
+                        <li class="nav-item"><a class="nav-link" href="{% url 'users:logout_page' %}" aria-expanded="false">
                             <div class="d-flex align-items-center"><span class="nav-link-text ps-1">Logout</span>
                             </div>
                           </a>
                           <!-- more inner pages-->
                         </li>
-                        <li class="nav-item"><a class="nav-link" href="pages/authentication/simple/register.html" aria-expanded="false">
+                        <li class="nav-item"><a class="nav-link" href="{% url 'users:register_page' %}" aria-expanded="false">
                             <div class="d-flex align-items-center"><span class="nav-link-text ps-1">Register</span>
                             </div>
                           </a>
@@ -403,19 +415,19 @@
                       </a>
                       <!-- more inner pages-->
                       <ul class="nav collapse false" id="card">
-                        <li class="nav-item"><a class="nav-link" href="pages/authentication/card/login.html" aria-expanded="false">
+                        <li class="nav-item"><a class="nav-link" href="{% url 'users:login_page' %}" aria-expanded="false">
                             <div class="d-flex align-items-center"><span class="nav-link-text ps-1">Login</span>
                             </div>
                           </a>
                           <!-- more inner pages-->
                         </li>
-                        <li class="nav-item"><a class="nav-link" href="pages/authentication/card/logout.html" aria-expanded="false">
+                        <li class="nav-item"><a class="nav-link" href="{% url 'users:logout_page' %}" aria-expanded="false">
                             <div class="d-flex align-items-center"><span class="nav-link-text ps-1">Logout</span>
                             </div>
                           </a>
                           <!-- more inner pages-->
                         </li>
-                        <li class="nav-item"><a class="nav-link" href="pages/authentication/card/register.html" aria-expanded="false">
+                        <li class="nav-item"><a class="nav-link" href="{% url 'users:register_page' %}" aria-expanded="false">
                             <div class="d-flex align-items-center"><span class="nav-link-text ps-1">Register</span>
                             </div>
                           </a>
@@ -453,19 +465,19 @@
                       </a>
                       <!-- more inner pages-->
                       <ul class="nav collapse false" id="split">
-                        <li class="nav-item"><a class="nav-link" href="pages/authentication/split/login.html" aria-expanded="false">
+                        <li class="nav-item"><a class="nav-link" href="{% url 'users:login_page' %}" aria-expanded="false">
                             <div class="d-flex align-items-center"><span class="nav-link-text ps-1">Login</span>
                             </div>
                           </a>
                           <!-- more inner pages-->
                         </li>
-                        <li class="nav-item"><a class="nav-link" href="pages/authentication/split/logout.html" aria-expanded="false">
+                        <li class="nav-item"><a class="nav-link" href="{% url 'users:logout_page' %}" aria-expanded="false">
                             <div class="d-flex align-items-center"><span class="nav-link-text ps-1">Logout</span>
                             </div>
                           </a>
                           <!-- more inner pages-->
                         </li>
-                        <li class="nav-item"><a class="nav-link" href="pages/authentication/split/register.html" aria-expanded="false">
+                        <li class="nav-item"><a class="nav-link" href="{% url 'users:register_page' %}" aria-expanded="false">
                             <div class="d-flex align-items-center"><span class="nav-link-text ps-1">Register</span>
                             </div>
                           </a>
@@ -1478,7 +1490,7 @@
           <nav class="navbar navbar-light navbar-glass navbar-top navbar-expand">
 
             <button class="btn navbar-toggler-humburger-icon navbar-toggler me-1 me-sm-3" type="button" data-bs-toggle="collapse" data-bs-target="#navbarVerticalCollapse" aria-controls="navbarVerticalCollapse" aria-expanded="false" aria-label="Toggle Navigation"><span class="navbar-toggle-icon"><span class="toggle-line"></span></span></button>
-            <a class="navbar-brand me-1 me-sm-3" href="home.html">
+            <a class="navbar-brand me-1 me-sm-3" href="{% url 'shop:home' %}">
               <div class="d-flex align-items-center"><img class="me-2" src="{% static 'users/assets/img/icons/spot-illustrations/falcon.png' %}" alt="" width="40" /><span class="font-sans-serif">alijahon</span>
               </div>
             </a>
@@ -1502,7 +1514,7 @@
                           <div class="fw-normal title">Pages <span class="fas fa-chevron-right mx-1 text-500 fs--2" data-fa-transform="shrink-2"></span> Events</div>
                         </div>
                       </a>
-                      <a class="dropdown-item fs--1 px-card py-1 hover-primary" href="app/e-commerce/customers.html">
+                      <a class="dropdown-item fs--1 px-card py-1 hover-primary" href="{% url 'users:customer_list' %}">
                         <div class="d-flex align-items-center">
                           <span class="fas fa-circle me-2 text-300 fs--2"></span>
 
@@ -1511,7 +1523,7 @@
                       </a>
 
                       <hr class="bg-200 dark__bg-900" />
-                      <h6 class="dropdown-header fw-medium text-uppercase px-card fs--2 pt-0 pb-2">Suggested Filter</h6><a class="dropdown-item px-card py-1 fs-0" href="app/e-commerce/customers.html">
+                      <h6 class="dropdown-header fw-medium text-uppercase px-card fs--2 pt-0 pb-2">Suggested Filter</h6><a class="dropdown-item px-card py-1 fs-0" href="{% url 'users:customer_list' %}">
                         <div class="d-flex align-items-center"><span class="badge fw-medium text-decoration-none me-2 badge-soft-warning">customers:</span>
                           <div class="flex-1 fs--1 title">All customers list</div>
                         </div>
@@ -1619,62 +1631,92 @@
 
                     <div class="dropdown-divider"></div>
                     <a class="dropdown-item" href="pages/user/settings.html">Sozlamalar</a>
-                    <a class="dropdown-item" href="pages/authentication/card/logout.html">Chiqish</a>
+
+                    {% if request.user.is_authenticated %}
+                        <a href="{% url 'users:logout_page' %}">Chiqish</a>
+                    {% else %}
+                        <a href="{% url 'users:login_page' %}">Kirish</a>
+                    {% endif %}
+                    
                   </div>
                 </div>
               </li>
             </ul>
           </nav>
 
+
 <div class="card mt-2 mb-2">
-            <div class="card-header bg-light">
-              <div class="row align-items-center">
-                <div class="col">
-                  <h5 class="mb-0" id="followers"></h5>
-                </div>
-                <div class="col text-end"><a class="font-sans-serif" href="#">Kategoriyalar</a>
-                </div>
-              </div>
-            </div>
-            <div class="card-body bg-light px-1 py-0">
-              <div class="row g-0 text-center fs--1">
-                {% for category in categories %}
-                  <div class="col-4 col-md-4 col-lg-3 col-xx1-2 mb-1">
-                    <div class="bg-white dark__bg-1100 p-1 h-100">
-                      {% if category.image %}
-                        <img class="img-thumbnail img-fluid mb-3 shadow-sm" src="{{ category.image.url }}" alt="{{ category.name }}" width="100">
-                      {% else %}
-                        <img class="img-thumbnail img-fluid mb-3 shadow-sm" src="{% static 'users/assets/img/team/default.jpg' %}" alt="{{ category.name }}" width="100">
-                      {% endif %}
-                      <h6 class="mb-1">
-                        <a href="{% url 'shop:category_detail' category.id %}">{{ category.name }}</a>
-                      </h6>
-                    </div>
-                  </div>
-                {% endfor %}
-
-              </div>
-
-            </div>
-          </div>
-
-<h3 class="mt-4">Products</h3>
-<div class="row">
-  {% for product in products %}
-    <div class="col-md-4 mb-4">
-      <div class="card h-100">
-        <img src="{{ product.image.url }}" class="card-img-top" alt="{{ product.name }}">
-        <div class="card-body">
-          <h5 class="card-title">{{ product.name }}</h5>
-          <p class="card-text">{{ product.description|truncatewords:20 }}</p>
-          <p class="card-text"><strong>Narxi:</strong> {{ product.price }} so‘m</p>
-          <a href="{% url 'shop:product_detail' product.pk %}" class="btn btn-primary">Batafsil</a>
+  <div class="card-header bg-light">
+    <div class="row align-items-center">
+      <div class="col">
+        <h5 class="mb-0" id="followers"></h5>
+      </div>
+      <div class="col text-end">
+        <div class="dropdown">
+          <a class="font-sans-serif dropdown-toggle" href="#" role="button" id="dropdownCategories" data-bs-toggle="dropdown" aria-expanded="false">
+            Kategoriyalar
+          </a>
+          <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownCategories" style="max-height: 300px; overflow-y: auto;">
+            <li><a class="dropdown-item" href="{% url 'shop:home' %}">All Products</a></li>
+            <li><hr class="dropdown-divider"></li>
+            {% for category in categories %}
+              <li>
+                <a class="dropdown-item" href="{% url 'shop:home' %}?category={{ category.id }}">{{ category.name }}</a>
+              </li>
+            {% endfor %}
+          </ul>
         </div>
       </div>
     </div>
-  {% empty %}
-    <p>Bu kategoriyada mahsulotlar yo‘q.</p>
-  {% endfor %}
+  </div>
+  <div class="card-body bg-light px-1 py-0">
+    <div class="row g-0 text-center fs--1">
+      {% for category in categories %}
+        <div class="col-4 col-md-4 col-lg-3 col-xx1-2 mb-1">
+          <div class="bg-white dark__bg-1100 p-1 h-100">
+            {% if category.image %}
+              <a href="{% url 'shop:home' %}?category={{ category.id }}">
+                <img class="img-thumbnail img-fluid mb-3 shadow-sm" src="{{ category.image.url }}" alt="{{ category.name }}" width="100">
+              </a>
+            {% else %}
+              <a href="{% url 'shop:home' %}?category={{ category.id }}">
+                <img class="img-thumbnail img-fluid mb-3 shadow-sm" src="{% static 'users/assets/img/team/default.jpg' %}" alt="{{ category.name }}" width="100">
+              </a>
+            {% endif %}
+            <h6 class="mb-1">
+              <a href="{% url 'shop:home' %}?category={{ category.id }}">{{ category.name }}</a>
+            </h6>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+
+
+
+<h3 class="mt-4">Products</h3>
+<div class="row">
+{% for product in products %}
+  <div class="col-md-3 mb-4">
+    <div class="card h-100">
+      <a href="{% url 'shop:product_details' product.id %}">
+        <img src="{{ product.main_image_url }}" class="card-img-top img-fluid" style="height: 200px; object-fit: cover;" alt="{{ product.name }}">
+      </a>
+      <div class="card-body">
+        <h5 class="card-title">
+          <a href="{% url 'shop:product_details' product.id %}" class="text-decoration-none text-dark">{{ product.name }}</a>
+        </h5>
+        <p class="card-text">{{ product.description|truncatewords:10 }}</p>
+        <a href="{% url 'shop:product_details' product.id %}" class="btn btn-primary btn-sm">Batafsil</a>
+      </div>
+    </div>
+  </div>
+{% endfor %}
+
+</div>
+
+
 </div>
 
 <div class="card mb-3">
@@ -1686,10 +1728,13 @@
                       <div class="position-relative rounded-top overflow-hidden"><a class="d-block" href="./app/e-commerce/product/product-details.html"><img class="img-fluid rounded-top" src="{% static 'users/assets/img/products/2.jpg' %}" alt=""></a>
                       </div>
                         <div class="p-2">
-                          <h5 class="fs-0"><a class="text-dark" href="./app/e-commerce/product/product-details.html">Apple iMac Pro </a></h5>
-                          <p class="fs--1 mb-2"><a class="text-500" href="#!">Computer &amp; Accessories</a></p>
-                          <h5 class="fs-md-2 text-warning mb-0 d-flex align-items-center mb-2"> 150 000 so'm
-                            <!-- <del class="ms-2 fs--1 text-500">180 000 so'm </del> -->
+                          {% if product.id %}
+                            <a class="text-dark" href="{% url 'shop:product_details' product.id %}">{{ product.name }}</a>
+                          {% else %}
+                            <span class="text-muted">{{ product.name }}</span>
+                          {% endif %}
+                          <p class="fs--1 mb-2"><a class="text-500" href="#!">{{product.categoy}}</a></p>
+                          <h5 class="fs-md-2 text-warning mb-0 d-flex align-items-center mb-2">{{product.price}}
                           </h5>
                           </p>
                         </div>
