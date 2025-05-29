@@ -5,6 +5,7 @@ from decimal import Decimal
 
 
 def home(request):
+    
     search_query = request.GET.get('q', '')
     category_id = request.GET.get('category')
 
@@ -69,7 +70,7 @@ def add_review(request, product_id):
                 content=review_text,
             )
 
-    return redirect('shop:product_details', product_id=product.id)
+    return redirect('shop:detail.html', product_id=product.id)
 
 
 def product_list(request):
