@@ -9,6 +9,7 @@ class BaseModel(models.Model):
 
     class Meta:
         abstract = True
+        # proxy = True
 
 class Category(models.Model):
     name = models.CharField(max_length=100)
@@ -87,3 +88,24 @@ class Review(models.Model):
         return f"{self.author} - {self.product.name} ({self.rating})"
 
 
+class AtributeKey(BaseModel):
+    key_name = models.CharField(max_length=50, unique=True)
+        
+    def __str__(self):
+        return self.key_name
+
+
+class AtributeValue(BaseModel):
+    value_name = models.CharField(max_length=255, unique=True)
+
+    def __str__(self):
+        return self.value_name
+    
+class Atribute(BaseModel):
+    atribute_key = models.ForeignKey(AtributeKey, on_delete=models.CASCADE)
+    atribute_value = models.ForeignKey(AtributeValue, on_delete=models.CASCADE)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return f'{self.product.name} - {self.atribute_key.key_name} - {self.atribute_value.value_name}'
+    
