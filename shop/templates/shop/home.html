@@ -1,11 +1,13 @@
-{% extends 'shop/base/base.html' %}
-{% load static %}
+{%extends 'shop/base/base.html' %}
+{%load static%}
 
-{% block title %}
-  Ecommerce
-{% endblock %}
 
-{% block main_content %}
+{%block title%}
+  Shop
+{%endblock%}
+
+
+{%block main_content%}
 <div class="card mt-2 mb-2">
             <div class="card-header bg-light">
               <div class="row align-items-center">
@@ -18,32 +20,35 @@
             </div>
             <div class="card-body bg-light px-1 py-0">
               <div class="row g-0 text-center fs--1">
-                {% for category in categories %}
+                {% for category in categories%}
                   <div class="col-4 col-md-4 col-lg-3 col-xx1-2 mb-1">
-                    <div class="bg-white dark__bg-1100 p-1 h-100"><a href="?category={{ category.id }}"><img class="img-thumbnail img-fluid  mb-3 shadow-sm" src="{{category.image.url}}" alt="" width="100"></a>
-                      <h6 class="mb-1"><a href="?category={{ category.id }}">{{category.name}}</a>
+                    <div class="bg-white dark__bg-1100 p-1 h-100">
+                      <a href="{% url 'shop:get_all_products_by_category' category.slug %}">
+                        <img class="img-thumbnail img-fluid  mb-3 shadow-sm" src="{{category.image.url}}" alt="" width="100">
+                      </a>
+                      <h6 class="mb-1"><a href="#">{{category.name}}</a>
                       </h6>
                       <p class="fs--2 mb-1"></p>
                     </div>
                   </div>
-                {% endfor %}
+                {%endfor%}
               </div>
             </div>
-          </div>
+</div>
 
 <div class="card mb-3">
             <div class="card-body">
               <div class="row">
-                {% for product in products %}
+                {% for product in products%}
                   <div class="col-6 mb-3 col-md-6 col-lg-4">
                     <div class="border rounded-1 d-flex flex-column justify-content-between pb-3">
                       <div class="overflow-hidden">
-                        <div class="position-relative rounded-top overflow-hidden"><a class="d-block" href="{% url 'shop:product_details' product.id %}"><img class="img-fluid rounded-top" src="{{product.main_image_url}}" alt=""></a>
+                        <div class="position-relative rounded-top overflow-hidden"><a class="d-block" href="{% url 'shop:product_details' product.id %}"><img class="img-fluid rounded-top" src="{{product.images.first.image.url}}" alt=""></a>
                         </div>
                           <div class="p-2">
                             <h5 class="fs-0"><a class="text-dark" href="{% url 'shop:product_details' product.id %}">{{product.name}} </a></h5>
-                            <p class="fs--1 mb-2"><a class="text-500" href="#!">{{product.category.name}}</a></p>
-                            <h5 class="fs-md-2 text-warning mb-0 d-flex align-items-center mb-2">{{product.price}}
+                            <p class="fs--1 mb-2"><a class="text-500" href="#!">{{product.category.title}}</a></p>
+                            <h5 class="fs-md-2 text-warning mb-0 d-flex align-items-center mb-2"> {{product.price}} so'm
                               <!-- <del class="ms-2 fs--1 text-500">180 000 so'm </del> -->
                             </h5>
                             </p>
@@ -55,8 +60,12 @@
                       </div>
                     </div>
                   </div>
-                {% endfor %}
-              
+                {%endfor%}
+                                              
+
+
+
+
               </div>
             </div>
             <div class="card-footer bg-light d-flex justify-content-center">
@@ -67,4 +76,4 @@
             </div>
           </div>
 
-{% endblock %}
+{%endblock%}

@@ -2,7 +2,7 @@ from django.shortcuts import render, get_object_or_404, redirect
 from .models import Product, Category, Review
 from decimal import Decimal
 from django.views import View
-from django.views.generic import ListView, CreateView
+from django.views.generic import TemplateView, CreateView
 from django.urls import reverse_lazy
 
 
@@ -28,25 +28,27 @@ from django.urls import reverse_lazy
 
 
 class Home(View):
-    def get(self, request):
-        search_query = request.GET.get('q', '')
-        category_id = request.GET.get('category')
+    def get(self, request, category_slug=None):
         categories = Category.objects.all()
         products = Product.objects.all()
-
-        if category_id:
-            products = products.filter(category_id=category_id)
-
-        if search_query:
-            products = products.filter(name__icontains=search_query)
-
         context = {
-            'products': products,
             'categories': categories,
-            'selected_category_id': int(category_id) if category_id else None
+            'products' : products
         }
-        return render(request, 'shop/home.html', context)
+        if category_slug:
+            products = Product.objects.filter(category__slug = category_slug)
+            return render(request, 'shop/product-list.html', {'products': products})
+    
+        return render(request,'shop/home.html',context)
 
+        
+        
+
+    # def get_context_data(self, **kwargs):
+    #     context = super().get_context_data(**kwargs)
+    #     context['categories'] = Category.objects.all()
+    #     context['products'] = Product.objects.all()
+    #     return context
 
 
 # def category_detail(request, pk):
@@ -83,15 +85,23 @@ class ProductDetail(View):
         main_image = product.images.filter(is_main=True).first()
         gallery_images = product.images.exclude(is_main=True)
         reviews = product.reviews.order_by('-date')
-        
+
+        specs = None
+        try:
+            specs = product.specs
+        except Exception:
+            specs = None
 
         context = {
             'product': product,
             'main_image': main_image,
             'gallery_images': gallery_images,
             'reviews': reviews,
+            'specs': specs,
         }
         return render(request, 'shop/detail.html', context)
+
+
 
 # def product_grid(request):
 #     products = Product.objects.all()
@@ -149,17 +159,17 @@ class AddReview(CreateView):
 
 class ProductList(View):
     def get(self, request):
-            category_id = request.GET.get('category')
+        category_id = request.GET.get('category')
 
-            if category_id:
-                products = Product.objects.filter(category_id=category_id)
-            else:
-                products = Product.objects.all()
+        if category_id:
+            products = Product.objects.select_related('category', 'specs').filter(category_id=category_id)
+        else:
+            products = Product.objects.select_related('category', 'specs').all()
 
-            categories = Category.objects.all()
-            context = {
-                'products': products,
-                'categories': categories,
-            }
+        categories = Category.objects.all()
+        context = {
+            'products': products,
+            'categories': categories,
+        }
+        return render(request, 'shop/product-list.html', context)
 
-            return render(request, 'shop/product-list.html', context)

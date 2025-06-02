@@ -8,6 +8,7 @@ app_name = 'shop'
 urlpatterns = [
     path('', Home.as_view(), name='home'),
     path('product/<int:product_id>/', ProductDetail.as_view(), name='product_details'),
+    path('products/<slug:category_slug>/', Home.as_view(), name='get_all_products_by_category'),
     path('products/', ProductList.as_view(), name='product_list'),
     path('product-grid/', ProductGrid.as_view(), name='product_grid'),
     path('category/<int:pk>/', CategoryDetail.as_view(), name='category_detail'),

@@ -1,6 +1,8 @@
 from django.db import models
 from decimal import Decimal
 from django.conf import settings
+from django.utils.text import slugify
+
 
 class BaseModel(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
@@ -14,11 +16,19 @@ class BaseModel(models.Model):
 class Category(models.Model):
     name = models.CharField(max_length=100)
     image = models.ImageField(upload_to='Categories/', null=True, blank=True)
+    slug = models.SlugField(null=True, blank=True)
+
+    def save(self, *args, **kwargs):
+        # if self.slug is None:
+        self.slug = slugify(self.name)
+        super(Category,self).save(*args, **kwargs)
+
 
     def __str__(self):
         return self.name
 
 class ProductSpecification(models.Model):
+    product = models.OneToOneField('Product', on_delete=models.CASCADE, related_name='specs')
     processor = models.CharField(max_length=100, blank=True)
     memory = models.CharField(max_length=100, blank=True)
     display = models.CharField(max_length=100, blank=True)
@@ -28,7 +38,8 @@ class ProductSpecification(models.Model):
     finish = models.CharField(max_length=100, blank=True)
 
     def __str__(self):
-        return f"Specs for {self.id}"
+        return f"Specs for {self.product.name}"
+
 
 class Product(BaseModel):
     name = models.CharField(max_length=100)
@@ -39,7 +50,6 @@ class Product(BaseModel):
     quantity = models.PositiveIntegerField(default=0)
     main_image = models.ImageField(upload_to='products/main/', blank=True, null=True)
     long_description = models.TextField(blank=True, null=True)
-    specs = models.ForeignKey(ProductSpecification, on_delete=models.CASCADE, related_name='products', null=True, blank=True)
 
 
     def __str__(self):
@@ -104,7 +114,7 @@ class AtributeValue(BaseModel):
 class Atribute(BaseModel):
     atribute_key = models.ForeignKey(AtributeKey, on_delete=models.CASCADE)
     atribute_value = models.ForeignKey(AtributeValue, on_delete=models.CASCADE)
-    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='attributes')
 
     def __str__(self):
         return f'{self.product.name} - {self.atribute_key.key_name} - {self.atribute_value.value_name}'
