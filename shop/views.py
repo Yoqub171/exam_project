@@ -4,6 +4,7 @@ from decimal import Decimal
 from django.views import View
 from django.views.generic import TemplateView, CreateView
 from django.urls import reverse_lazy
+from django.core.paginator import Paginator
 
 
 # def home(request):
@@ -31,13 +32,20 @@ class Home(View):
     def get(self, request, category_slug=None):
         categories = Category.objects.all()
         products = Product.objects.all()
+        paginator = Paginator(products, 3)
+        page_number = request.GET.get("page")
+        page_obj = paginator.get_page(page_number)
+
         context = {
             'categories': categories,
-            'products' : products
+            'page_obj' : page_obj
         }
         if category_slug:
             products = Product.objects.filter(category__slug = category_slug)
-            return render(request, 'shop/product-list.html', {'products': products})
+            context = {
+                'products': products,
+            }
+            return render(request, 'shop/product-list.html', context)
     
         return render(request,'shop/home.html',context)
 
@@ -57,7 +65,7 @@ class Home(View):
 #     return render(request, 'shop/category_detail.html', {'category': category, 'products': products})
 
 class CategoryDetail(View):
-    def get(self, request):
+    def get(self, request, pk):
         category = get_object_or_404(Category, pk=pk)
         products = category.products.all()
         return render(request, 'shop/category_detail.html', {'category': category, 'products': products})
@@ -86,18 +94,11 @@ class ProductDetail(View):
         gallery_images = product.images.exclude(is_main=True)
         reviews = product.reviews.order_by('-date')
 
-        specs = None
-        try:
-            specs = product.specs
-        except Exception:
-            specs = None
-
         context = {
             'product': product,
             'main_image': main_image,
             'gallery_images': gallery_images,
             'reviews': reviews,
-            'specs': specs,
         }
         return render(request, 'shop/detail.html', context)
 
@@ -162,9 +163,9 @@ class ProductList(View):
         category_id = request.GET.get('category')
 
         if category_id:
-            products = Product.objects.select_related('category', 'specs').filter(category_id=category_id)
+            products = Product.objects.select_related('category',).filter(category_id=category_id)
         else:
-            products = Product.objects.select_related('category', 'specs').all()
+            products = Product.objects.select_related('category',).all()
 
         categories = Category.objects.all()
         context = {

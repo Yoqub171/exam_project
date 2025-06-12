@@ -1,29 +1,25 @@
 from django import forms
-from .models import Customer, CustomUser
+from .models import CustomUser
 
-
-class CustomerForm(forms.ModelForm):
-    class Meta:
-        model = Customer
-        fields = ['first_name', 'last_name', 'email', 'phone', 'address']
 
 
 class LoginForm(forms.Form):
     email = forms.EmailField()
     password = forms.CharField()
-    
+
     def clean_email(self):
         email = self.data.get('email')
         if not CustomUser.objects.filter(email=email).exists():
             raise forms.ValidationError(f'{email} not found')
         return email
-    
+
     def clean_password(self):
         password = self.data.get('password')
         if len(password) < 8:
-            raise forms.ValidationError('Password\'s lenght must be greater than 8')
+            raise forms.ValidationError('Password\'s length must be greater than 8')
         return password
-    
+
+
 class RegisterModelForm(forms.ModelForm):
     password = forms.CharField(widget=forms.PasswordInput)
     confirm_password = forms.CharField(widget=forms.PasswordInput)

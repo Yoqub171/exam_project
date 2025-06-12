@@ -51,6 +51,9 @@ INSTALLED_APPS = [
     'users',
     "adminsortable2",
     'import_export',
+    'customers',
+    "phonenumber_field",
+
 ]
 
 MIDDLEWARE = [

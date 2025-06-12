@@ -1,58 +1,7 @@
-from django.shortcuts import render, redirect, get_object_or_404
-from .models import Customer
-from .forms import CustomerForm, LoginForm, RegisterModelForm
-from django.contrib import messages
+from django.shortcuts import render, redirect
+from .forms import LoginForm, RegisterModelForm
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
-
-
-
-def customer_detail(request, pk):
-    customer = get_object_or_404(Customer, pk=pk)
-    logs = getattr(customer, 'logs', None)
-    if logs:
-        logs = logs.order_by('-timestamp')[:10]
-    return render(request, 'users/customers_detail.html', {'customer': customer, 'logs': logs})
-
-
-
-def customer_list(request):
-    customers = Customer.objects.all()
-    return render(request, 'users/customers.html', {'customers': customers})
-
-def add_customer(request):
-    if request.method == 'POST':
-        form = CustomerForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect('user:customer_list')
-    else:
-        form = CustomerForm()
-    return render(request, 'users/customers_detail.html', {'form': form, 'customer': None})
-
-
-def edit_customer(request, pk):
-    customer = get_object_or_404(Customer, pk=pk)
-    
-    if request.method == 'POST':
-        form = CustomerForm(request.POST, instance=customer)
-        if form.is_valid():
-            form.save()
-            return redirect('users:customer_list')
-    else:
-        form = CustomerForm(instance=customer)
-    
-    return render(request, 'users/customers_detail.html', {'form': form, 'customer': customer})
-
-
-def delete_customer(request, pk):
-    customer = get_object_or_404(Customer, pk=pk)
-    if request.method == 'POST':
-        customer.delete()
-        return redirect('users:customer_list')
-    return render(request, 'users/customers_detail.html', {'customer': customer})
-
-
 
 
 def login_page(request):

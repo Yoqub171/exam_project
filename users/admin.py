@@ -1,16 +1,7 @@
 from django.contrib import admin
-from .models import Customer, CustomUser
+from .models import CustomUser
 from django.contrib.auth.admin import UserAdmin
 from django.utils.translation import gettext_lazy as _
-
-
-
-
-@admin.register(Customer)
-class CustomerAdmin(admin.ModelAdmin):
-    list_display = ('first_name', 'last_name', 'email', 'phone', 'created_at')
-    search_fields = ('first_name', 'last_name', 'email')
-    list_filter = ('created_at',)
 
 
 @admin.register(CustomUser)
