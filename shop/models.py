@@ -37,6 +37,7 @@ class Product(BaseModel):
     quantity = models.PositiveIntegerField(default=0)
     main_image = models.ImageField(upload_to='products/main/', blank=True, null=True)
     long_description = models.TextField(blank=True, null=True)
+    code = models.CharField(max_length=255, null=True, blank=True)
 
 
     def __str__(self):

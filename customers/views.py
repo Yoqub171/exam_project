@@ -1,8 +1,10 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import Customer
 from .forms import CustomerForm
-from tablib import Dataset
-from django.http import HttpResponse, HttpResponseBadRequest
+from django.http import HttpResponse
+import csv
+import json
+from django.views.generic import ListView,DetailView
 
 
 
@@ -52,38 +54,37 @@ def delete_customer(request, pk):
     return render(request, 'customers/customers_detail.html', {'customer': customer})
 
 
-def export_customers(request):
-    file_format = request.GET.get('format', 'csv')
-    dataset = Dataset()
-    dataset.headers = ['ID', 'Full Name', 'Email', 'Phone', 'Address', 'Joined']
+def export_data(request):
+    file_type = request.GET.get('file_type')
+    if file_type == 'csv':
+        response = HttpResponse(content_type='text/csv')
+        response['Content-Disposition'] = 'attachment; filename="customers.csv"'
 
-    for customer in Customer.objects.all():
-        dataset.append([
-            customer.id,
-            customer.full_name,
-            customer.email,
-            customer.phone,
-            customer.address,
-            customer.joined.strftime("%Y-%m-%d %H:%M")
-        ])
+        writer = csv.writer(response)
+        writer.writerow(['ID','FULL NAME','EMAIL','PHONE NUMBER','ADDRESS','JOINED'])
 
-    if file_format == 'csv':
-        content = dataset.export('csv')
-        content_type = 'test/csv'
-        file_ext  ='csv'
+        customers = Customer.objects.all().values_list('id','full_name','email','phone','address','joined')
+        for customer in customers:
+            writer.writerow(customer)
 
-    elif file_format == 'json':
-        content = dataset.export('json')
-        content_type = 'application/json'
-        file_ext = 'json'
+        return response
 
-    elif file_format == 'xls':
-        content = dataset.export('xls')
-        content_type = 'application/vnd.excel'
-        file_ext = 'xls'
-    else:
-        return HttpResponseBadRequest('Unsupported export format')
+    elif file_type == 'json':
+        response = HttpResponse(content_type='application/json')
+        data = list(Customer.objects.all().values('id','full_name', 'email', 'phone', 'address','joined'))
+        response.write(json.dumps(data, indent=4,default=str))
+        response['Content-Disposition'] = 'attachment; filename=customers.json'
+        return response
     
-    response = HttpResponse(content, content_type=content_type)
-    response['Content-Disposition'] = f'attachment; filename="customers.{file_ext}"'
-    return response
+    elif file_type == 'excel':
+        response = HttpResponse(content_type='text/tab-separated=values')
+        response['Content-Dispoition'] = 'attachment; filename="customers.xls"'
+
+        writer = csv.writer(response, delimiter='\t')
+        writer.writerow(['ID', 'FULL_NAME', 'EMAIl', 'PHONE NUMBER', 'ADDRESS', 'JOINED'])
+
+        customers = Customer.objects.all().values_list('id', 'full_name', 'email', 'phone', 'address', 'joined')
+        for customer in customers:
+            writer.writerow(customer)
+
+        return response
