@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <title>Email yuborish</title>
+    <style>
+        body { font-family: sans-serif; max-width: 400px; margin: 40px auto; }
+        input, textarea, button {
+            width: 100%; padding: 10px; margin-top: 10px; border-radius: 6px;
+            border: 1px solid #ccc; font-size: 16px;
+        }
+        button {
+            background-color: #4CAF50; color: white; border: none;
+        }
+    </style>
+</head>
+<body>
+    <h2>Email yuborish</h2>
+    <form method="post">
+        {% csrf_token %}
+        <input type="email" name="email" placeholder="Qabul qiluvchining email manzili" required>
+        <input type="text" name="subject" placeholder="Xabar sarlavhasi" required>
+        <textarea name="message" placeholder="Xabar matni" rows="5" required></textarea>
+        <button type="submit">Yuborish</button>
+    </form>
+</body>
+</html>

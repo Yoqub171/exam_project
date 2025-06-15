@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import Home, ProductDetail, ProductList, ProductGrid, CategoryDetail, AddReview
+from .views import Home, ProductDetail, ProductList, ProductGrid, CategoryDetail, AddReview, send_email
 from django.conf import settings
 from django.conf.urls.static import static
 
@@ -13,7 +13,9 @@ urlpatterns = [
     path('product-grid/', ProductGrid.as_view(), name='product_grid'),
     path('category/<int:pk>/', CategoryDetail.as_view(), name='category_detail'),
     path('product/<int:product_id>/add_review/', AddReview.as_view(), name='add_review'),
+    path('send_email/', send_email, name='send_email'),
 ]
+
 
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

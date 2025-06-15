@@ -5,6 +5,10 @@ from django.views import View
 from django.views.generic import TemplateView, CreateView
 from django.urls import reverse_lazy
 from django.core.paginator import Paginator
+from django.core.mail import send_mail
+from django.http import HttpResponse
+from django.conf import settings
+
 
 
 # def home(request):
@@ -173,4 +177,20 @@ class ProductList(View):
             'categories': categories,
         }
         return render(request, 'shop/product-list.html', context)
+    
 
+def send_email(request):
+    if request.method == 'POST':
+        email = request.POST.get('email')
+        subject = request.POST.get('subject')
+        message = request.POST.get('message')
+
+        send_mail(
+            subject,
+            message,  
+            settings.EMAIL_HOST_USER,
+            [email],
+            fail_silently=False,
+        )
+        return HttpResponse('Message successfully send')
+    return render(request, 'shop/send_email.html')
