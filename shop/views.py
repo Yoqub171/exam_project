@@ -192,5 +192,5 @@ def send_email(request):
             [email],
             fail_silently=False,
         )
-        return HttpResponse('Message successfully send')
+        return HttpResponse('Message successfully send' )
     return render(request, 'shop/send_email.html')

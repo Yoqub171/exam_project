@@ -1,6 +1,7 @@
-from django.contrib.auth.models import AbstractUser, AbstractBaseUser, PermissionsMixin
+# users/models.py
 from django.db import models
 from django.utils import timezone
+from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
 from users.managers import CustomUserManager
 
 
@@ -10,10 +11,9 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     is_active = models.BooleanField(default=True)
     is_superuser = models.BooleanField(default=True)
     date_joined = models.DateTimeField(default=timezone.now)
-    image = models.ImageField(upload_to='users/',null=True,blank=True)
+    image = models.ImageField(upload_to='users/', null=True, blank=True)
 
-
-    USERNAME_FIELD = "email"
+    USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = []
 
     objects = CustomUserManager()

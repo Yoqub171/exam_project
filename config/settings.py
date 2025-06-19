@@ -53,6 +53,7 @@ INSTALLED_APPS = [
     'import_export',
     'customers',
     "phonenumber_field",
+    'social_django',
 
 ]
 
@@ -64,6 +65,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'social_django.middleware.SocialAuthExceptionMiddleware',
+
 ]
 
 ROOT_URLCONF = 'config.urls'
@@ -81,6 +84,8 @@ TEMPLATES = [
                 'django.template.context_processors.media',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'social_django.context_processors.backends',
+                'social_django.context_processors.login_redirect',
             ],
         },
     },
@@ -160,6 +165,10 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+SOCIAL_AUTH_GITHUB_SCOPE = ['user:email']
+SOCIAL_AUTH_GOOGLE_OAUTH2_SCOPE = ['email']
+
+
 AUTH_USER_MODEL = 'users.CustomUser'
 
 
@@ -170,3 +179,22 @@ EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_HOST_USER = 'mardonovyoqubjon50@gmail.com'
 EMAIL_HOST_PASSWORD = 'lsiq ojid mkxx jeof'
+
+AUTHENTICATION_BACKENDS = (
+    'social_core.backends.google.GoogleOAuth2',
+    'social_core.backends.github.GithubOAuth2',
+    'django.contrib.auth.backends.ModelBackend',
+)
+
+
+SOCIAL_AUTH_GITHUB_KEY = 'Ov23li2woLeymi6x3ugc'
+SOCIAL_AUTH_GITHUB_SECRET = '1bbcef6dcdf4a2d89a7a3d45fe1beb432891982e'
+
+SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = 'YOUR_CLIENT_ID'
+SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = 'YOUR_CLIENT_SECRET'
+
+LOGIN_URL = 'login'
+LOGOUT_URL = 'logout'
+LOGIN_REDIRECT_URL = '/'
+LOGOUT_REDIRECT_URL = '/'
+
