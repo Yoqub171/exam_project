@@ -66,7 +66,8 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'social_django.middleware.SocialAuthExceptionMiddleware',
-
+    'config.middleware.RequestLoggingMiddleware',
+    'config.middleware.AutoLogoutMiddleware',
 ]
 
 ROOT_URLCONF = 'config.urls'
@@ -141,7 +142,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Asia/Tashkent'
 
 USE_I18N = True
 
@@ -172,13 +173,13 @@ SOCIAL_AUTH_GOOGLE_OAUTH2_SCOPE = ['email']
 AUTH_USER_MODEL = 'users.CustomUser'
 
 
-
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_HOST_USER = 'mardonovyoqubjon50@gmail.com'
 EMAIL_HOST_PASSWORD = 'lsiq ojid mkxx jeof'
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 
 AUTHENTICATION_BACKENDS = (
     'social_core.backends.google.GoogleOAuth2',
@@ -190,11 +191,7 @@ AUTHENTICATION_BACKENDS = (
 SOCIAL_AUTH_GITHUB_KEY = 'Ov23li2woLeymi6x3ugc'
 SOCIAL_AUTH_GITHUB_SECRET = '1bbcef6dcdf4a2d89a7a3d45fe1beb432891982e'
 
-SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = 'YOUR_CLIENT_ID'
-SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = 'YOUR_CLIENT_SECRET'
+SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = '1006340737171-fp5t0q6ru9rrmdflcapd3darmgjpc9ev.apps.googleusercontent.com'
+SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = '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'
 
-LOGIN_URL = 'login'
-LOGOUT_URL = 'logout'
 LOGIN_REDIRECT_URL = '/'
-LOGOUT_REDIRECT_URL = '/'
-

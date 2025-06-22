@@ -73,7 +73,7 @@
         </script>
         <div class="row min-vh-100 bg-100">
           <div class="col-6 d-none d-lg-block position-relative">
-            <div class="bg-holder" style="{% static 'users/background-image:url(assets/img/generic/19.jpg)' %};">
+            <div class="bg-holder" style="background-image: url('{% static 'users/assets/img/generic/19.jpg' %}');">
             </div>
             <!--/.bg-holder-->
 
@@ -90,23 +90,24 @@
                       </div>
                       <div class="col-auto fs--1 text-600"><span class="mb-0 fw-semi-bold">Already User?</span> <span><a href="{% url 'users:login_page' %}">Login</a></span></div>
                     </div>      
-                    <form>
+                    <form method="POST" action="">
+                      {% csrf_token %}
                       <div class="mb-3">
                         <label class="form-label" for="split-name">Name</label>
-                        <input class="form-control" type="text" autocomplete="on" id="split-name" />
+                        <input class="form-control" type="text" name="name" autocomplete="on" id="split-name" />
                       </div>
                       <div class="mb-3">
                         <label class="form-label" for="split-email">Email address</label>
-                        <input class="form-control" type="email" autocomplete="on" id="split-email" />
+                        <input class="form-control" type="email" name="email" autocomplete="on" id="split-email" />
                       </div>
                       <div class="row gx-2">
                         <div class="mb-3 col-sm-6">
                           <label class="form-label" for="split-password">Password</label>
-                          <input class="form-control" type="password" autocomplete="on" id="split-password" />
+                          <input class="form-control" type="password" name="password" autocomplete="on" id="split-password" />
                         </div>
                         <div class="mb-3 col-sm-6">
                           <label class="form-label" for="split-confirm-password">Confirm Password</label>
-                          <input class="form-control" type="password" autocomplete="on" id="split-confirm-password" />
+                          <input class="form-control" type="password" name="confirm_password" autocomplete="on" id="split-confirm-password" />
                         </div>
                       </div>
                       <div class="form-check">
@@ -214,7 +215,7 @@
           <div class="row gx-2">
             <div class="col-6">
               <input class="btn-check" id="navbar-style-transparent" type="radio" name="navbarStyle" value="transparent" data-theme-control="navbarStyle" />
-              <label class="btn d-block w-100 btn-navbar-style fs--1" for="navbar-style-transparent"> <img class="img-fluid img-prototype" src="{% static 'usersassets/img/generic/default.png' %}" alt="" /><span class="label-text"> Transparent</span></label>
+              <label class="btn d-block w-100 btn-navbar-style fs--1" for="navbar-style-transparent"> <img class="img-fluid img-prototype" src="{% static 'users/assets/img/generic/default.png' %}" alt="" /><img class="img-fluid img-prototype" src="{% static 'users/assets/img/generic/default.png' %}" alt="" /><span class="label-text"> Transparent</span></label>
             </div>
             <div class="col-6">
               <input class="btn-check" id="navbar-style-inverted" type="radio" name="navbarStyle" value="inverted" data-theme-control="navbarStyle" />
