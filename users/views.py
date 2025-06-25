@@ -11,31 +11,73 @@ from .tokens import account_activation_token
 from django.contrib.auth.models import User
 from django.core.mail import EmailMessage
 from django.contrib.auth import get_user_model
+from django.views.generic.edit import FormView
+from django.urls import reverse_lazy
 
 
 
-def login_page(request):
-    form = LoginForm()
-    if request.method == 'POST':
-        form = LoginForm(request.POST)
-        if form.is_valid():
-            cd = form.cleaned_data
+# def login_page(request):
+#     form = LoginForm()
+#     if request.method == 'POST':
+#         form = LoginForm(request.POST)
+#         if form.is_valid():
+#             cd = form.cleaned_data
 
-            user = authenticate(request,email = cd['email'],password = cd['password'])
+#             user = authenticate(request,email = cd['email'],password = cd['password'])
             
-            if user:
-                login(request,user)
-                return redirect('shop:home')
-            else:
-                messages.error(request, 'Username or Password incorrect')
+#             if user:
+#                 login(request,user)
+#                 return redirect('shop:home')
+#             else:
+#                 messages.error(request, 'Username or Password incorrect')
 
             
-    return render(request,'users/login.html',{'form':form})
+#     return render(request,'users/login.html',{'form':form})
+
+class LoginPage(FormView):
+    template_name = 'users/login.html'
+    form_class = LoginForm
+    success_url = reverse_lazy('shop:home')
+
+    def form_valid(self, form):
+        cd = form.cleaned_data
+        user = authenticate(self.request,email = cd['email'],password = cd['password'])
+        
+        if user:
+            login(self.request,user)
+            return redirect('shop:home')
+        else:
+            messages.error(self.request, 'Username or Password incorrect')
+            return self.form_invalid(form)
 
 
 def logout_page(request):
     logout(request)
     return redirect('shop:home')
+
+
+class RegisterPage(FormView):
+    template_name = 'users/register.html'
+    form_class = RegisterModelForm
+    # success_url = reverse_lazy
+
+    def form_valid(self, form):
+        user = form.save(commit=False)
+        user.set_password(form.cleaned_data['password'])
+        user.is_active = False
+        user.save()
+        current_site = get_current_site(self.request)
+        mail_subject = 'Activate your account.'
+        message = render_to_string('users/acc_active_email.html', {
+            'user': user,
+            'domain': current_site.domain,
+            'uid': urlsafe_base64_encode(force_bytes(user.pk)),
+            'token': account_activation_token.make_token(user),
+        })
+        to_email = form.cleaned_data.get('email')
+        email = EmailMessage(mail_subject, message, to=[to_email])
+        email.send()
+        return HttpResponse('Please confirm your email address to complete the registration')
 
 
 def register_page(request):

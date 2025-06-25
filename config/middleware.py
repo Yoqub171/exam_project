@@ -11,7 +11,7 @@ class RequestLoggingMiddleware:
         # Call the next mmiddleware or view
         response = self.get_response(request)
         return response
-    
+
 
 
 class AutoLogoutMiddleware:
@@ -27,7 +27,6 @@ class AutoLogoutMiddleware:
                 elapsed_time = now - datetime.datetime.fromisoformat(last_activity)
                 if elapsed_time.total_seconds() > 300:
                     logout(request)
-                    request.session.flush()
                     print(f"[AutoLogout] User was automatically logged out ({request.user.username})")
             request.session['last_activity'] = now.isoformat()
 
